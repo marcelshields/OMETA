@@ -19,150 +19,143 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
+<s:include value="TopMenu.jsp" />
+  
+    <style>
+      #popup {
+        height: 100%;
+        width: 100%;
+        background: #000000;
+        position: absolute;
+        top: 0;
+        -moz-opacity:0.75;
+        -khtml-opacity: 0.75;
+        opacity: 0.75;
+        filter:alpha(opacity=75);
+      }
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <link rel="stylesheet" href="style/dataTables.css" />
-  <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" />
-  <style>
-    #popup {
-      height: 100%;
-      width: 100%;
-      background: #000000;
-      position: absolute;
-      top: 0;
-      -moz-opacity:0.75;
-      -khtml-opacity: 0.75;
-      opacity: 0.75;
-      filter:alpha(opacity=75);
-    }
+      #window {
+        width: 600px;
+        height: 300px;
+        margin: 0 auto;
+        border: 1px solid #000000;
+        background: #ffffff;
+        position: absolute;
+        top: 200px;
+        left: 25%;
+      }
+      td._details {
+        text-align:left;
+        padding:0 0 0 35px;
+        border: 1px gray dotted;
+      }
+      td._details div { position: relative; overflow: auto; overflow-y: hidden; }
+      td._details table td { border:1px solid white; }
 
-    #window {
-      width: 600px;
-      height: 300px;
-      margin: 0 auto;
-      border: 1px solid #000000;
-      background: #ffffff;
-      position: absolute;
-      top: 200px;
-      left: 25%;
-    }
-    td._details {
-      text-align:left;
-      padding:0 0 0 35px;
-      border: 1px gray dotted;
-    }
-    td._details div { position: relative; overflow: auto; overflow-y: hidden; }
-    td._details table td { border:1px solid white; }
+      .datatable_top, .datatable_table, .datatable_bottom { float:left; clear:both; width:100%;}
+    </style>
+    <s:form id="eventDetailPage" name="eventDetailPage" namespace="/" action="eventDetail" method="post" theme="simple">
+      <s:hidden id="editable" name="editable" value="0" />
+      <div id="HeaderPane">
+        <h1>Event Detail</h1>
+        <div id="errorMessagesPanel" style="margin-top:15px;"></div>
+        <s:if test="hasActionErrors()">
+          <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
+        </s:if>
+        <s:if test="hasActionMessages()">
+          <div class="alert_info" onclick="$('.alert_info').remove();">
+            <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+          </div>
+        </s:if>
+      </div>
+      <div id="middle_content_template">
+        <!--<div id="columnsTable"></div>  for column listing-->
+        <div id="statusTableDiv">
+          <div id="tableTop">
+            <table>
+              <tr>
+                <td align="right">Project</td>
+                <td class="ui-combobox">
+                  <s:select label="Project" id="_projectSelect" cssStyle="width:150px;margin:0 5 0 10;"
+                            list="projectList" name="selectedProjectId" headerKey="0" headerValue=""
+                            listValue="projectName" listKey="projectId" required="true"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right">Sample</td>
+                <td class="ui-combobox">
+                  <s:select id="_sampleSelect" cssStyle="margin:0 5 0 10;" list="#{'0':''}"
+                            name="selectedSampleId" required="true"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div style="margin:25px 10px 0 0;"><h1 class="csc-firstHeader">Project Details</h1></div>
+          <div id="projectTableDiv" style="margin:0 10px 5px 0;">
+            <table name="projectTable" id="projectTable" class="contenttable" style="width:95%;">
+              <tbody id="projectTableBody">
+              </tbody>
+            </table>
+            <input onclick="_page.popup.project();" style="margin-top:10px;" disabled="true" type="button" value="Edit Project" id="editProjectBtn" />
+          </div>
+          <div style="margin:25px 10px 0 0;">
 
-    .datatable_top, .datatable_table, .datatable_bottom { float:left; clear:both; width:100%;}
-  </style>
-</head>
-<body>
-<s:form id="eventDetailPage" name="eventDetailPage" namespace="/" action="eventDetail" method="post" theme="simple">
-  <s:hidden id="editable" name="editable" value="0" />
-  <s:include value="TopMenu.jsp" />
-  <div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div class="panelHeader">Event Detail</div>
-    <div id="errorMessagesPanel" style="margin-top:15px;"></div>
-    <s:if test="hasActionErrors()">
-      <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
-    </s:if>
-    <s:if test="hasActionMessages()">
-      <div class="alert_info" onclick="$('.alert_info').remove();">
-        <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+            <h1 class="csc-firstHeader">Sample Details
+              <a href="javascript:$('#sampleTableDiv').toggle(400);buttonSwitch(null, 'sampleToggleImage');">
+                <img id="sampleToggleImage"/>
+              </a>
+            </h1>
+          </div>
+          <div id="sampleTableDiv" style="margin:0 10px 5px 0;clear:both">
+            <table name="sampleTable" id="sampleTable" class="contenttable" style="width:95%;">
+              <thead id="sampleTableHeader">
+              <tr>
+                <th style="width:23px !important;text-align:center"><img id="table_openBtn"/></th>
+                <th class="tableHeaderStyle">Sample Name</th>
+                <th class="tableHeaderStyle">Parent</th>
+                <th class="tableHeaderStyle">User</th>
+                <th class="tableHeaderStyle">Date</th>
+                <th>Hidden</th>
+              </tr>
+              </thead>
+              <tbody id="sampleTableBody"/>
+            </table>
+          </div>
+          <div style="margin:25px 10px 0 0;">
+            <h1 class="csc-firstHeader">Event Details
+              <a href="javascript:$('#eventDateDiv').toggle(400);$('#eventTableDiv').toggle(400);buttonSwitch(null,'eventToggleImage');">
+                <img id="eventToggleImage"/>
+              </a>
+            </h1>
+          </div>
+          <div id="eventDateDiv" style="margin:3px 10px 0 0;">
+            Date Range:
+            <s:textfield id="fromDate" name="fromDate"/> ~ <s:textfield id="toDate" name = "toDate"/>
+          </div>
+          <div id="eventTableDiv" style="margin:10px 10px 5px 0;clear:both">
+            <table name="eventTable" id="eventTable" class="contenttable" style="width:95%;">
+              <thead id="eventTableHeader">
+              <tr>
+                <th style="width:23px !important;text-align:center"><img id="table_openBtn"/></th>
+                <th class="tableHeaderStyle">Event Type</th>
+                <th class="tableHeaderStyle">Sample Name</th>
+                <th class="tableHeaderStyle">Date</th>
+                <th class="tableHeaderStyle">User</th>
+                <th class="tableHeaderStyle">Status</th>
+                <th>Hidden</th>
+              </tr>
+              </thead>
+              <tbody id="eventTableBody" />
+            </table>
+            <div/>
+          </div>
+        </div>
       </div>
-    </s:if>
-  </div>
-  <div id="middle_content_template">
-    <!--<div id="columnsTable"></div>  for column listing-->
-    <div id="statusTableDiv">
-      <div id="tableTop">
-        <table>
-          <tr>
-            <td align="right">Project</td>
-            <td class="ui-combobox">
-              <s:select label="Project" id="_projectSelect" cssStyle="width:150px;margin:0 5 0 10;"
-                        list="projectList" name="selectedProjectId" headerKey="0" headerValue=""
-                        listValue="projectName" listKey="projectId" required="true"/>
-            </td>
-          </tr>
-          <tr>
-            <td align="right">Sample</td>
-            <td class="ui-combobox">
-              <s:select id="_sampleSelect" cssStyle="margin:0 5 0 10;" list="#{'0':''}"
-                        name="selectedSampleId" required="true"/>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div style="margin:25px 10px 0 0;"><h1 class="csc-firstHeader">Project Details</h1></div>
-      <div id="projectTableDiv" style="margin:0 10px 5px 0;">
-        <table name="projectTable" id="projectTable" class="contenttable" style="width:95%;">
-          <tbody id="projectTableBody">
-          </tbody>
-        </table>
-        <input onclick="_page.popup.project();" style="margin-top:10px;" disabled="true" type="button" value="Edit Project" id="editProjectBtn" />
-      </div>
-      <div style="margin:25px 10px 0 0;">
 
-        <h1 class="csc-firstHeader">Sample Details
-          <a href="javascript:$('#sampleTableDiv').toggle(400);buttonSwitch(null, 'sampleToggleImage');">
-            <img id="sampleToggleImage"/>
-          </a>
-        </h1>
-      </div>
-      <div id="sampleTableDiv" style="margin:0 10px 5px 0;clear:both">
-        <table name="sampleTable" id="sampleTable" class="contenttable" style="width:95%;">
-          <thead id="sampleTableHeader">
-          <tr>
-            <th style="width:23px !important;text-align:center"><img id="table_openBtn"/></th>
-            <th class="tableHeaderStyle">Sample Name</th>
-            <th class="tableHeaderStyle">Parent</th>
-            <th class="tableHeaderStyle">User</th>
-            <th class="tableHeaderStyle">Date</th>
-            <th>Hidden</th>
-          </tr>
-          </thead>
-          <tbody id="sampleTableBody"/>
-        </table>
-      </div>
-      <div style="margin:25px 10px 0 0;">
-        <h1 class="csc-firstHeader">Event Details
-          <a href="javascript:$('#eventDateDiv').toggle(400);$('#eventTableDiv').toggle(400);buttonSwitch(null,'eventToggleImage');">
-            <img id="eventToggleImage"/>
-          </a>
-        </h1>
-      </div>
-      <div id="eventDateDiv" style="margin:3px 10px 0 0;">
-        Date Range:
-        <s:textfield id="fromDate" name="fromDate"/> ~ <s:textfield id="toDate" name = "toDate"/>
-      </div>
-      <div id="eventTableDiv" style="margin:10px 10px 5px 0;clear:both">
-        <table name="eventTable" id="eventTable" class="contenttable" style="width:95%;">
-          <thead id="eventTableHeader">
-          <tr>
-            <th style="width:23px !important;text-align:center"><img id="table_openBtn"/></th>
-            <th class="tableHeaderStyle">Event Type</th>
-            <th class="tableHeaderStyle">Sample Name</th>
-            <th class="tableHeaderStyle">Date</th>
-            <th class="tableHeaderStyle">User</th>
-            <th class="tableHeaderStyle">Status</th>
-            <th>Hidden</th>
-          </tr>
-          </thead>
-          <tbody id="eventTableBody" />
-        </table>
-        <div/>
-      </div>
-    </div>
-  </div>
-
-</s:form>
+    </s:form>
+  </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 
 <script src="scripts/jquery/jquery.dataTables.js"></script>
 <script>

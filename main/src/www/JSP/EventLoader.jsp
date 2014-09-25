@@ -19,180 +19,170 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
+<s:include value="TopMenu.jsp" />
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <link rel="stylesheet" href="style/dataTables.css" />
-  <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" />
-  <link rel="stylesheet" href="style/multiple-select.css" />
-  <style>
-    .loadRadio { margin-left: 10px; margin-right: 3px; }
-    #gridBody .ui-autocomplete-input { width: 150px; }
-    .gridIndex { max-width: 5px !important; text-align: center;}
-    .ms-choice {line-height: 20px; }
-    .ms-choice, .ms-choice > div { height: 20px; }
-  </style>
-
-</head>
-
-<body>
-
-<s:form id="eventLoaderPage" name="eventLoaderPage" namespace="/" action="eventLoader" method="post" theme="simple" enctype="multipart/form-data">
-  <s:hidden name="jobType" id="jobType"/>
-  <s:hidden name="label" id="label"/>
-  <s:hidden name="eventName" id="eventName" />
-  <s:hidden name="projectName" id="projectName" />
-  <s:include value="TopMenu.jsp" />
-  <div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div class="panelHeader">Event Loader</div>
-    <div id="errorMessagesPanel" style="margin-top:15px;"></div>
-    <s:if test="hasActionErrors()">
-      <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
-    </s:if>
-    <s:if test="hasActionMessages()">
-      <div class="alert_info" onclick="$('.alert_info').remove();">
-        <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+    <style>
+      .loadRadio { margin-left: 10px; margin-right: 3px; }
+      #gridBody .ui-autocomplete-input { width: 150px; }
+      .gridIndex { max-width: 5px !important; text-align: center;}
+      .ms-choice {line-height: 20px; }
+      .ms-choice, .ms-choice > div { height: 20px; }
+    </style>
+    <s:form id="eventLoaderPage" name="eventLoaderPage" namespace="/" action="eventLoader" method="post" theme="simple" enctype="multipart/form-data">
+      <s:hidden name="jobType" id="jobType"/>
+      <s:hidden name="label" id="label"/>
+      <s:hidden name="eventName" id="eventName" />
+      <s:hidden name="projectName" id="projectName" />
+      <div id="HeaderPane">
+        <h1>Event Loader</h1>
+        <div id="errorMessagesPanel" style="margin-top:15px;"></div>
+        <s:if test="hasActionErrors()">
+          <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
+        </s:if>
+        <s:if test="hasActionMessages()">
+          <div class="alert_info" onclick="$('.alert_info').remove();">
+            <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+          </div>
+        </s:if>
       </div>
-    </s:if>
-  </div>
-  <div id="middle_content_template">
-  <div id="statusTableDiv">
-  <div id="tableTop">
-    <table id="ddTable">
-      <tr>
-        <td><strong>Load Type</strong></td>
-        <td style="padding-left:10px">
-          <input type="radio" name="loadType" class="loadRadio" value="form"><strong>Form</strong></input>
-          <input type="radio" name="loadType" class="loadRadio" value="grid"><strong>Grid</strong></input>
-          <input type="radio" name="loadType" class="loadRadio" value="file"><strong>File</strong></input>
-        </td>
-      </tr>
-      <tr height="10px"/>
-      <tr>
-        <div id="projectDropBox">
-          <td>Project</td>
-          <td style="padding-left:10px" class="ui-combobox">
-            <s:select id="_projectSelect" list="projectList" name="projectId" headerKey="0" headerValue=""
-                      listValue="projectName" listKey="projectId" required="true"/>
-          </td>
-        </div>
-      </tr>
-      <tr>
-        <div id="eventDropBox">
-          <td>Event</td>
-          <td style="padding-left:10px" class="ui-combobox">
-            <s:select id="_eventSelect" list="#{'0':''}" name="eventId" required="true" disabled="true"/>
-          </td>
-        </div>
-      </tr>
-      <tr class="sampleSelectTr">
-        <td id="sampleNameLabel">Sample</td>
-        <td style="padding-left:10px" class="ui-combobox">
-          <s:select id="_sampleSelect" list="#{'0':''}" name="sampleName" required="true" disabled="true"/>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div id="projectDetailInputDiv">
-    <div style="margin:25px 10px 0 0;">
-      <h1 class="csc-firstHeader">Project Information</h1>
-    </div>
-    <div id="projectDetailSubDiv">
-      <table>
-        <tr>
-          <td align="right" id="loadProjectNameLabel">Project Name</td>
-          <td class="requiredField"><input type="text" id="_projectName" name="loadingProject.projectName" size="33px"/></td>
-        </tr>
-        <tr class="gappedTr">
-          <td align="right">Public</td>
-          <td class="requiredField">
-            <s:select id="_isProjectPublic" list="#{0:'No', 1:'Yes'}" name="loadingProject.isPublic" required="true" />
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <div id="sampleDetailInputDiv">
-    <div style="margin:25px 10px 0 0;">
-      <h1 class="csc-firstHeader">Sample Information</h1>
-    </div>
-    <div id="sampleDetailSubDiv">
-      <table>
-        <tr>
-          <td align="right" id="loadSampleNameLabel">Sample Name</td>
-          <td class="requiredField"><input type="text" id="_sampleName" name="loadingSample.sampleName" size="33px"/></td>
-        </tr>
-        <tr id="parentSelectTr" class="gappedTr">
-          <td align="right" id="parentSampleLabel">Parent Sample</td>
-          <td class="ui-combobox">
-            <s:select id="_parentSampleSelect" list="#{'0':''}" name="loadingSample.parentSampleName" required="true"/>
-          </td>
-        </tr>
-        <tr class="gappedTr">
-          <td align="right">Public</td>
-          <td class="requiredField">
-            <s:select id="_isSamplePublic" list="#{0:'No', 1:'Yes'}" name="loadingSample.isPublic" required="true" />
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div style="margin:25px 10px 0 0;">
-    <div style="float:left;">
-      <h1 class="csc-firstHeader">Event Attributes</h1>
-    </div>
-    <div style="font-size:0.9em;padding-top:5px;margin-left:135px;padding-left:50px">
-      [<img style="vertical-align:bottom;" src="images/icon/req.png"/><img style="vertical-align:bottom;" src="images/icon/info_r.png"/>-Required, <img style="vertical-align:bottom;" src="images/icon/ontology.png"/>-Ontology]
-    </div>
-  </div>
-  <div id="attributeInputDiv" style="margin:10px 0;">
-    <s:if test="beanList != null && beanList.size() > 0">
-      <table>
-        <s:iterator value="beanList" var="attrName" status="stat">
-          <tr class="gappedTr">
-            <s:hidden name="beanList[%{#stat.index}].projectName" />
-            <s:hidden name="beanList[%{#stat.index}].sampleName" />
-            <s:hidden name="beanList[%{#stat.index}].attributeName" />
-            <td align="right"><s:property value="attributeName"/></td>
-            <td><s:textfield name="beanList[%{#stat.index}].attributeValue"/></td>
+      <div id="middle_content_template">
+      <div id="statusTableDiv">
+      <div id="tableTop">
+        <table id="ddTable">
+          <tr>
+            <td><strong>Load Type</strong></td>
+            <td style="padding-left:10px">
+              <input type="radio" name="loadType" class="loadRadio" value="form"><strong>Form</strong></input>
+              <input type="radio" name="loadType" class="loadRadio" value="grid"><strong>Grid</strong></input>
+              <input type="radio" name="loadType" class="loadRadio" value="file"><strong>File</strong></input>
+            </td>
           </tr>
-        </s:iterator>
-      </table>
-    </s:if>
-  </div>
-  <div id="gridInputDiv" style="margin:25px 10px 0 0 ;">
-    <table name="eventTable" id="eventTable" class="contenttable">
-      <thead id="gridHeader"></thead>
-      <tbody id="gridBody"></tbody>
-    </table>
-  </div>
-  <div id="fileInputDiv" style="margin:25px 10px 0 0 ;">
-    <table>
-      <tr>
-        <td>Loader CSV File</td>
-        <td>
-          <s:file name="dataTemplate" id="upload" cssStyle="margin:0 0 0 14px;" size="75px" />
-        </td>
-      </tr>
-    </table>
-  </div>
+          <tr height="10px"/>
+          <tr>
+            <div id="projectDropBox">
+              <td>Project</td>
+              <td style="padding-left:10px" class="ui-combobox">
+                <s:select id="_projectSelect" list="projectList" name="projectId" headerKey="0" headerValue=""
+                          listValue="projectName" listKey="projectId" required="true"/>
+              </td>
+            </div>
+          </tr>
+          <tr>
+            <div id="eventDropBox">
+              <td>Event</td>
+              <td style="padding-left:10px" class="ui-combobox">
+                <s:select id="_eventSelect" list="#{'0':''}" name="eventId" required="true" disabled="true"/>
+              </td>
+            </div>
+          </tr>
+          <tr class="sampleSelectTr">
+            <td id="sampleNameLabel">Sample</td>
+            <td style="padding-left:10px" class="ui-combobox">
+              <s:select id="_sampleSelect" list="#{'0':''}" name="sampleName" required="true" disabled="true"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="projectDetailInputDiv">
+        <div style="margin:25px 10px 0 0;">
+          <h2>Project Information</h2>
+        </div>
+        <div id="projectDetailSubDiv">
+          <table>
+            <tr>
+              <td align="right" id="loadProjectNameLabel">Project Name</td>
+              <td class="requiredField"><input type="text" id="_projectName" name="loadingProject.projectName" size="33px"/></td>
+            </tr>
+            <tr class="gappedTr">
+              <td align="right">Public</td>
+              <td class="requiredField">
+                <s:select id="_isProjectPublic" list="#{0:'No', 1:'Yes'}" name="loadingProject.isPublic" required="true" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="sampleDetailInputDiv">
+        <div style="margin:25px 10px 0 0;">
+          <h2>Sample Information</h2>
+        </div>
+        <div id="sampleDetailSubDiv">
+          <table>
+            <tr>
+              <td align="right" id="loadSampleNameLabel">Sample Name</td>
+              <td class="requiredField"><input type="text" id="_sampleName" name="loadingSample.sampleName" size="33px"/></td>
+            </tr>
+            <tr id="parentSelectTr" class="gappedTr">
+              <td align="right" id="parentSampleLabel">Parent Sample</td>
+              <td class="ui-combobox">
+                <s:select id="_parentSampleSelect" list="#{'0':''}" name="loadingSample.parentSampleName" required="true"/>
+              </td>
+            </tr>
+            <tr class="gappedTr">
+              <td align="right">Public</td>
+              <td class="requiredField">
+                <s:select id="_isSamplePublic" list="#{0:'No', 1:'Yes'}" name="loadingSample.isPublic" required="true" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
 
-  <div id="submitDiv" style="margin:15px 10px 5px 0;width:100%;">
-    <input type="button" onclick="javascript:button.submit_event();" id="eventLoadButton" value="Submit Event" disabled="true"/>
-    <input type="button" onclick="javascript:button.add_event();" id="gridAddLineBtn" value="Add Event Line" style="display:none;"/>
-    <input type="button" onclick="javascript:button.template();" id="templateButton" value="Download Template"/>
-    <input type="button" onclick="javascript:button.clear_form();" value="Clear" />
-    <div>
-    </div>
-  </div>
-</s:form>
+      <div class="row" style="margin-top:25px;">
+        <div class="col-lg-2">
+          <h2>Event Attributes</h2>
+        </div>
+        <div class="col-lg-4" style="font-size:0.9em;padding-top:15px">
+          [<img style="vertical-align:bottom;" src="images/icon/req.png"/><img style="vertical-align:bottom;" src="images/icon/info_r.png"/>-Required, <img style="vertical-align:bottom;" src="images/icon/ontology.png"/>-Ontology]
+        </div>
+      </div>
+      <div id="attributeInputDiv" style="margin:10px 0;">
+        <s:if test="beanList != null && beanList.size() > 0">
+          <table>
+            <s:iterator value="beanList" var="attrName" status="stat">
+              <tr class="gappedTr">
+                <s:hidden name="beanList[%{#stat.index}].projectName" />
+                <s:hidden name="beanList[%{#stat.index}].sampleName" />
+                <s:hidden name="beanList[%{#stat.index}].attributeName" />
+                <td align="right"><s:property value="attributeName"/></td>
+                <td><s:textfield name="beanList[%{#stat.index}].attributeValue"/></td>
+              </tr>
+            </s:iterator>
+          </table>
+        </s:if>
+      </div>
+      <div id="gridInputDiv" style="margin:25px 10px 0 0 ;">
+        <table name="eventTable" id="eventTable" class="contenttable">
+          <thead id="gridHeader"></thead>
+          <tbody id="gridBody"></tbody>
+        </table>
+      </div>
+      <div id="fileInputDiv" style="margin:25px 10px 0 0 ;">
+        <table>
+          <tr>
+            <td>Loader CSV File</td>
+            <td>
+              <s:file name="dataTemplate" id="upload" cssStyle="margin:0 0 0 14px;" size="75px" />
+            </td>
+          </tr>
+        </table>
+      </div>
 
-<script src="scripts/jquery/jquery.multiple.select.js"></script>
+      <div id="submitDiv" class="row">
+        <div class="col-lg-12">
+          <input class="btn btn-default" style="margin-left:0" type="button" onclick="javascript:button.submit_event();" id="eventLoadButton" value="Submit Event" disabled="true"/>
+          <input class="btn btn-default" type="button" onclick="javascript:button.add_event();" id="gridAddLineBtn" value="Add Event Line" style="display:none;"/>
+          <input class="btn btn-default" type="button" onclick="javascript:button.template();" id="templateButton" value="Download Template"/>
+          <input class="btn btn-default" type="button" onclick="javascript:button.clear_form();" value="Clear" />
+        </div>
+      </div>
+    </s:form>
+
+  </div><!-- end #content -->
+</div><!-- end #main -->
+
+<s:include value="globalJS.jsp" />
+<!-- <script src="scripts/jquery/jquery.multiple.select.js"></script> -->
 <script>
 var eventAttributes = [], gridLineCount=0, avDic= {};
 var pBeanHtml='<input type="hidden" value="$pn$" name="$lt$projectName"/>',

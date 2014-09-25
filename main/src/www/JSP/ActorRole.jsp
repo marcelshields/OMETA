@@ -1,76 +1,63 @@
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
+<s:include value="TopMenu.jsp" />
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" />
-  <link rel="stylesheet" href="style/chosen.css" />
-  <style>
-    tr.spacer > td {
-      padding-top: 1em;
-    }
-    ul {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-  </style>
-</head>
-
-<body>
-<s:form id="actorRolePage" name="actorRolePage" namespace="/" action="actorRole" method="post" theme="simple">
-  <s:include value="TopMenu.jsp" />
-  <div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div class="panelHeader">Actor Role Management</div>
-    <div id="errorMessagesPanel" style="margin-top:15px;"></div>
-    <s:if test="hasActionErrors()">
-      <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
-    </s:if>
-    <s:if test="hasActionMessages()">
-      <div class="alert_info" onclick="$('.alert_info').remove();">
-        <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+    <style>
+      tr.spacer > td {
+        padding-top: 1em;
+      }
+    </style>
+    <s:form id="actorRolePage" name="actorRolePage" namespace="/" action="actorRole" method="post" theme="simple">
+      <div id="HeaderPane">
+        <h1>Actor Role Management</h1>
+        <div id="errorMessagesPanel" style="margin-top:15px;"></div>
+        <s:if test="hasActionErrors()">
+          <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
+        </s:if>
+        <s:if test="hasActionMessages()">
+          <div class="alert_info" onclick="$('.alert_info').remove();">
+            <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+          </div>
+        </s:if>
       </div>
-    </s:if>
-  </div>
-  <div id="middle_content_template">
-    <div id="mainDiv">
-      <div id="tableTop">
-        <table>
-          <tr>
-            <div id="actorDropBox">
-              <td>Actor</td>
-              <td style="padding-left:10px" class="ui-combobox">
-                <s:select id="actorSelect"
-                            list="actors" name="actorId" headerKey="0" headerValue="None"
-                            listValue="username + ' - ' + firstName + ' ' +lastName" listKey="loginId" required="true" />
-              </td>
-            </div>
-          </tr>
-          <tr>
-            <div id="groupDropBox">
-              <td>Groups</td>
-              <td style="padding-left:10px" class="ui-combobox" width="450px">
-                <s:select id="groupSelect"
-                            list="groups" name="groupIds"
-                            listValue="groupNameLookupValue.name" listKey="groupId" 
-                            multiple="true" required="true" style="width:400px;height:19px;
-                            "/>
-              </td>
-            </div>
-          </tr>
-        </table>
+      <div id="middle_content_template">
+        <div id="mainDiv">
+          <div id="tableTop">
+            <table>
+              <tr>
+                <div id="actorDropBox">
+                  <td>Actor</td>
+                  <td style="padding-left:10px" class="ui-combobox">
+                    <s:select id="actorSelect"
+                                list="actors" name="actorId" headerKey="0" headerValue="None"
+                                listValue="username + ' - ' + firstName + ' ' +lastName" listKey="loginId" required="true" />
+                  </td>
+                </div>
+              </tr>
+              <tr>
+                <div id="groupDropBox">
+                  <td>Groups</td>
+                  <td style="padding-left:10px" class="ui-combobox" width="450px">
+                    <s:select id="groupSelect"
+                                list="groups" name="groupIds"
+                                listValue="groupNameLookupValue.name" listKey="groupId" 
+                                multiple="true" required="true" style="width:400px;height:19px;
+                                "/>
+                  </td>
+                </div>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div id="buttonDiv" class="row">
+          <input class="btn btn-default" type="button" onclick="submit();" id="setup" value="Setup Role"/>
+          <input class="btn btn-default" type="button" onclick="popup();" id="addRole" value="Add Actor Role"/>
+          <input class="btn btn-default" type="button" onclick="doClear();" value="Clear" />
+        </div>
       </div>
-    </div>
-    <div id="buttonDiv" style="margin:15px 10px 5px 0;width:100%;">
-      <input type="button" onclick="submit();" id="setup" value="Setup Role"/>
-      <input type="button" onclick="popup();" id="addRole" value="Add Actor Role"/>
-      <input type="button" onclick="doClear();" value="Clear" />
-    </div>
-  </div>
-</s:form>
+    </s:form>
+  </div><!-- end #content -->
+</div><!-- end #main -->
 
-<script src="scripts/jquery/chosen.jquery.min.js"></script>
+<s:include value="globalJS.jsp" />
 
 <script type="text/javascript">
   (function() {

@@ -1,17 +1,76 @@
 
-<!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <link rel="stylesheet" href="style/main.css" />
-    <link rel="stylesheet" href="style/version01.css" />
-    <link rel="stylesheet" href="style/rte.css" />
-    <link rel="stylesheet" href="style/dataTables.css" />
-    <link rel="stylesheet" href="style/tableTools.css" />
+<s:include value="TopMenu.jsp" />
+    
     <style>
+        p.header1, p.header1 em {
+          margin-top:1em;
+          margin-bottom:1em;
+          font-weight:500;
+          color:#0081b3;
+          clear: both;
+          font-size:1.5em; }
+        p.header1-line {
+          border-top:1px solid #cfcfcf;
+          padding: .5em 0 .5em 0;
+          margin-top:2em;
+          margin-bottom:.5em;
+          font-weight:500;
+          color:#0081b3;
+          clear: both;
+          font-size:1.5em; }
+        p.header1 em { font-size: 1em; }
+
+        p.header2, p.header2-line {
+          margin-top:1.5em;
+          margin-bottom:1em;
+          font-weight:500;
+          color:#686F74;
+          font-size:1.4em; }
+        p.header2-line {
+          border-top: 1px solid #cfcfcf;
+          padding: .5em 0 .5em 0;
+          margin-top: 2em;
+          margin-bottom: 0.5em;
+        } /* end p.header2-line */
+
+        p.header2 * { color: #686F74; }
+        p.header3, p.header3 em {
+          margin-top:.5em;
+          margin-bottom:.5em;
+          padding-left:.9em;
+          font-weight:500;
+          background: url('../images/menu_arrow.gif') no-repeat left;
+          color:#0081b3;
+          font-size:1.2em; }
+        p.header3 em {
+          background: none;
+          padding: 0;
+          font-size: 1em; }
+        p.code { font-family: 'Courier New', Courier, monospace; }
+
+        span.code { font-family: 'Courier New', Courier, monospace; }
+        span.event1 { color: #ff0000; } /* red */
+        span.event2 { color: #00ff00; } /* green */
+        span.event3 { color: #ffc0cb; } /* pink */
+
+        tr.tableHeader {
+          padding: 2px;
+          background-color: #a0a09b;
+          color: #ffffff; }
+        tr.tableRowEven {
+          padding: 2px;
+          background-color: #f5f5f5; }
+        tr.tableRowOdd {
+          padding: 2px;
+          background-color: #e9e9e9; }
+
+        tr.tableHeader td, tr.tableHeader th, tr.tableRowEven td, tr.tableRowOdd td { padding: 6px 8px; padding-bottom: 0; margin: 0; vertical-align: top; }
+        #middle_content tr.tableHeader td p.bodytext, #middle_content tr.tableRowEven td p.bodytext, #middle_content tr.tableRowOdd td p.bodytext { padding: 0; margin-bottom: 6px; }
+        tr.tableHeader td p.bodytext { color: #ffffff; }
+
+        td.leftColumn { color: #ffff00; }
+        td.highlight { color: #ff00ff; }
+
         fieldset legend:hover { cursor: pointer; }
         fieldset { padding: 5px 10px 5px 10px; }
         .collapsed { border-width: 1px 0px 0px 0px; padding: 5px 12px 0px 12px; }
@@ -20,8 +79,6 @@
         .dataTables_length { padding-left: 25px; }
         .DTTT_container { float: left !important; }
     </style>
-</head>
-<body>
     <s:form id="statusPage" name="statusPage"
             namespace="/"
             action="productionStatus"
@@ -30,7 +87,7 @@
         <s:hidden name="attributesOnScreen" id="attributesOnScreen"/>
         <s:hidden name="attributes" />
         <div id="HeaderPane" style="margin:15px 0 0 30px;">
-            <div class="panelHeader" style="margin:0;">Project Status</div>
+            <h1>Project Status</h1>
             <div id="errorMessagesPanel" style="margin-top:15px;"></div>
             <s:if test="hasActionErrors()">
                 <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
@@ -51,9 +108,10 @@
         </div>
 
     </s:form>
-    <script src="scripts/jquery/jquery-1.7.2.js"></script>
-    <script src="scripts/jquery/jquery-ui.js"></script>
-    <script src="scripts/ometa.utils.js"></script>
+    </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
+    
     <script src="scripts/jquery/jquery.tablesorter.js"></script>
     <script src="scripts/jquery/jquery.columnDisplay.js"></script>
     <script src="scripts/jquery/jquery.dataTables.js"></script>

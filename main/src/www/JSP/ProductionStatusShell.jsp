@@ -20,57 +20,48 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
+<s:include value="TopMenu.jsp" />
+        <style>
+            fieldset legend:hover { cursor: pointer; }
+            fieldset { padding: 5px 10px 5px 10px; }
+            .collapsed { border-width: 1px 0px 0px 0px; padding: 5px 12px 0px 12px; }
+            .headerContainer {width: 100%;}
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <link rel="stylesheet" href="style/rte.css" />
-    <link rel="stylesheet" href="style/dataTables.css" />
-    <link rel="stylesheet" href="style/tableTools.css" />
-    <style>
-        fieldset legend:hover { cursor: pointer; }
-        fieldset { padding: 5px 10px 5px 10px; }
-        .collapsed { border-width: 1px 0px 0px 0px; padding: 5px 12px 0px 12px; }
-        .headerContainer {width: 100%;}
-
-        .dataTables_length { padding-left: 25px; }
-        .DTTT_container { float: left !important; }
-    </style>
-</head>
-<body>
-    <s:form id="statusPage" name="statusPage"
-            namespace="/"
-            action="productionStatus"
-            method="post" theme="simple">
-        <s:hidden name="projectNames" />
-        <s:hidden name="attributesOnScreen" id="attributesOnScreen"/>
-        <s:hidden name="attributes" />
-        <s:include value="TopMenu.jsp" />
-        <div id="HeaderPane" style="margin:15px 0 0 30px;">
-            <div class="panelHeader" style="margin:0;">Project Status</div>
-            <div id="errorMessagesPanel" style="float:left;margin-top:15px;"></div>
-            <s:if test="hasActionErrors()">
-                <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
-            </s:if>
-        </div>
-        <div id="middle_content_template">
-            <p>An Excel version of this data is also available for download
-                <s:submit type="input" value="here"
-                          onclick="document.statusPage.action='productionStatusExcel.action';javascript:getDisplayedAttributes();"/>.</p>
-            <!--<div id="columnsTable"></div>  for column listing-->
-            <fieldset>
-                <legend> Show / Hide Columns </legend>
-                <div id="statusTableColumnToggler"></div>
-            </fieldset>
-            <div id="statusTableDiv">
-                <table id="statusTable" style="float:left;width:100%"></table>
+            .dataTables_length { padding-left: 25px; }
+            .DTTT_container { float: left !important; }
+        </style>
+        <s:form id="statusPage" name="statusPage"
+                namespace="/"
+                action="productionStatus"
+                method="post" theme="simple">
+            <s:hidden name="projectNames" />
+            <s:hidden name="attributesOnScreen" id="attributesOnScreen"/>
+            <s:hidden name="attributes" />
+            <div id="HeaderPane" style="margin:15px 0 0 30px;">
+                <h1>Project Status</h1>
+                <div id="errorMessagesPanel" style="float:left;margin-top:15px;"></div>
+                <s:if test="hasActionErrors()">
+                    <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
+                </s:if>
             </div>
-        </div>
+            <div id="middle_content_template">
+                <p>An Excel version of this data is also available for download
+                    <s:submit type="input" value="here"
+                              onclick="document.statusPage.action='productionStatusExcel.action';javascript:getDisplayedAttributes();"/>.</p>
+                <!--<div id="columnsTable"></div>  for column listing-->
+                <fieldset>
+                    <legend> Show / Hide Columns </legend>
+                    <div id="statusTableColumnToggler"></div>
+                </fieldset>
+                <div id="statusTableDiv">
+                    <table id="statusTable" style="float:left;width:100%"></table>
+                </div>
+            </div>
 
-    </s:form>
+        </s:form>
+    </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
     
     <script src="scripts/jquery/jquery.tablesorter.js"></script>
     <script src="scripts/jquery/jquery.columnDisplay.js"></script>

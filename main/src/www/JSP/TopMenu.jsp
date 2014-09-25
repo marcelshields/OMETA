@@ -26,233 +26,148 @@
   Time: 10:52 AM
   To change this template use File | Settings | File Templates.
   --%>
-<!DOCTYPE html>
-
+<!doctype html>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; {$charset|default:'charset=utf-8'}" />
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta http-equiv="expires" content="0">
-  <title>O-META</title>
-
+  <title>CEIRS DPCC</title>
+  <link rel='stylesheet' id='google-open-sans-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A400italic%2C700italic%2C300%2C400%2C700' type='text/css' media='screen' />
+  <link rel='stylesheet' id='ceirs-bootstrap-stylesheet-css'  href='https://s3.amazonaws.com/ceirs-public/css/bootstrap.css' type='text/css' media='all' />
+  <link rel='stylesheet' id='ceirs-font-awesome-stylesheet-css'  href='https://s3.amazonaws.com/ceirs-public/css/font-awesome.css' type='text/css' media='all' />
+  <link rel='stylesheet' id='ceirs-smartadmin-production-stylesheet-css'  href='https://s3.amazonaws.com/ceirs-public/css/smartadmin-production.css' type='text/css' media='all' />
+  <link rel='stylesheet' id='ceirs-smartadmin-skins-stylesheet-css'  href='https://s3.amazonaws.com/ceirs-public/css/smartadmin-skins.css' type='text/css' media='all' />
   <link rel="stylesheet" href="style/main.css" />
+  <link rel="stylesheet" href="style/dataTables.css" />
+  <link rel="stylesheet" href="style/tableTools.css" />
+  <link rel="stylesheet" href="style/chosen.css" />
+  <!-- <link rel="stylesheet" href="style/multiple-select.css" /> -->
   <link rel="stylesheet" href="style/version01.css" />
-  <style>
-    #header { height:auto !important; }
-    #header, #nav { margin: 0 10px !important; }
-    #nav{
-      height:32px;
-      line-height:32px;
-      background:#0081b3;
-      padding:0 10px;
-      min-width: 530px;
-    }
-    #nav ul, #nav ul li {
-      margin:0;
-      padding:0;
-      list-style:none;
-    }
-    #nav ul li{
-      float:left;
-      display:block;
-    }
-
-    #nav ul li a:link, #nav ul li a:visited{
-      color:#FFF;
-      font-size:14px;
-      font-weight:bold;
-      text-decoration:none;
-      padding:0 20px 0 6px;
-      display:block;
-    }
-    #nav ul li a:hover{
-      color:#EBEFF7;
-    }
-    #nav ul li ul li{
-      float:none;
-      display:block;
-    }
-    #nav ul li ul li a:link, #nav ul li ul li a:visited{
-      color:#444;
-      font-size:11px;
-      font-weight:bold;
-      text-decoration:none;
-      padding:0 10px;
-      clear:both;
-      border-bottom:solid 1px #DEDEDE;
-    }
-    #nav ul li ul li a:hover{
-      color:#3B5998;
-      background:#EBEFF7;
-    }
-
-    .submenu {
-      position: absolute;
-      background: #FFF;
-      padding: 10px;
-      border: solid 1px #0081b3;
-      border-top: none;
-      display: none;
-      line-height: 26px;
-      z-index: 1000;
-    }
-
-    .headerLink {
-      font-family: Arial, sans-serif;
-      font-size: 9pt;
-      font-style: normal;
-      font-weight: normal;
-      text-decoration: underline;
-    }
-  </style>
-
-  <script src="scripts/jquery/jquery-1.7.2.js"></script>
-  <script src="scripts/jquery/jquery-ui.js"></script>
-  <script src="scripts/ometa.utils.js"></script>
-  <script>
-    <jsp:useBean id="userBean" class="org.jcvi.ometa.web_bean.UserInfoWebBean"/>
-    <jsp:setProperty name="userBean" property="userId" value="<%=request.getRemoteUser()%>"/>
-
-    var _searchArr = window.location.search.substr(1).split("&"),
-        paramP, _temparr;
-    if(_searchArr) {
-      $(_searchArr).each(function() {
-        _temparr=this.split("=");
-        _temparr[0]==='p'?sessionStorage.setItem('pst.project', _temparr[1]):null;
-      });
-    }
-
-    $(document).ready(function() {
-      paramP = sessionStorage.getItem('pst.project');
-      $('#project_li,#cnmc_li,#gates_li').hide();
-      !paramP ? $('li#project_li').show()
-          :paramP==='T1D-CNMC' ? $('li#cnmc_li').show()
-          :paramP==='GATES' ? $('li#gates_li').show()
-          :$('li#project_li').show();
-
-
-      $('div#nav ul li').mouseover(function() {
-        $(this).find('ul:first').show();
-      });
-      $('div#nav ul li, div#nav ul li ul').mouseleave(function() {
-        $('div#nav ul li ul').hide();
-      });
-
-      var userName='<jsp:getProperty name="userBean" property="fullname"/>',
-          isAdmin='<jsp:getProperty name="userBean" property="admin"/>';
-      _=(isAdmin!=null && isAdmin!=='null' && isAdmin==='true')?$('#admin_li').show():$('#admin_li').hide();
-      if(userName!=null && userName!=='null') {
-        $('div#currUserName').html(userName+', <a class="headerLink" href="logout.action">Log Out</a>');
-        $('.noauthuser').hide();
-      } else {
-        $('.authuser').hide();
-        $('.noauthuser').show();
-      }
-    });
-  </script>
+  <!-- <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" /> -->
 </head>
-<body>
-<div id="header">
-  <table cellspacing="0" cellpadding="0">
-    <tbody>
-    <tr>
-      <td align="left" style="vertical-align: top;">
-        <table cellspacing="0" cellpadding="0" class="HeaderPanel">
-          <tbody>
-          <tr>
-            <td align="left" style="vertical-align: top;padding: 10px;">
-              <img class="headerImage" src="images/ometa_logo.png" alt="Ontology based Metadata Tracking">
-            </td>
-            <td align="left" style="padding: 0 0 0 25px;">
-              <table cellspacing="0" cellpadding="0" class="HeaderLinkPanel">
-                <tbody>
-                <tr>
-                  <td align="right">
-                    <div>
-                      <a class="headerLink" href="help.action">Help</a>
-                    </div>
-                  </td>
-                  <td align="right">
-                    <div class="HeaderLinkSeparator">|</div>
-                  </td>
-                  <td align="right" class="authuser">
-                    <div class="HeaderLink" id="currUserName" display="none"></div>
-                  </td>
-                  <td align="right" class="noauthuser">
-                    <div>
-                      <a class="headerLink" href="addActor.action">Register</a>
-                    </div>
-                  </td>
-                  <td align="right" class="noauthuser">
-                    <div class="HeaderLinkSeparator">|</div>
-                  </td>
-                  <td align="right" class="noauthuser">
-                    <div>
-                      <a class="headerLink" href="secureIndex.action">Log in</a>
-                    </div>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-<div id="nav">
-  <ul>
-    <li id="project_li"><a href="#">Project</a>
-      <ul class="submenu">
-        <li><a href="productionStatus.action?projectNames=GSC&iss=true">GSC</a></li>
-        <li><a href="productionStatus.action?projectNames=HMP&iss=true">HMP</a></li>
-        <li><a href="?p=T1D-CNMC">CNMC</a></li>
-        <li><a href="?p=GATES">GATES</a></li>
-      </ul>
-    </li>
-    <li id="cnmc_li"><a href="#">CNMC</a>
-      <ul class="submenu">
-        <li><a href="sampleWithEventLoader.action?label=Family">Register Family</a></li>
-        <li><a href="sampleWithEventLoader.action?label=Person">Register Person</a></li>
-        <li><a href="sampleWithEventLoader.action?label=Sample">Register Sample</a></li>
-        <li><a href="eventLoader.action?label=SR">Sample Receipt</a></li>
-        <li><a href="sampleWithEventLoader.action?label=Aliquot">Register Aliquot</a></li>
-      </ul>
-    </li>
-    <li id="gates_li"><a href="#">GATES</a>
-      <ul class="submenu">
-        <li><a href="eventLoader.action?label=PM">Patient Metadata</a></li>
-        <li><a href="eventLoader.action?label=HM">Household Metadata</a></li>
-        <li><a href="eventLoader.action?label=FM">Family Metadata</a></li>
-        <li><a href="eventLoader.action?label=SM">Sample Metadata</a></li>
-      </ul>
-    </li>
-    <li id="admin_li"><a href="#">Admin</a>
-      <ul class="submenu">
-        <li><a href="projectSetup.action">Project Setup</a></li>
-        <!--<li><a href="metadataSetup.action?type=p">Project Metadata Setup</a></li>
-     <li><a href="metadataSetup.action?type=s">Sample Metadata Setup</a></li>-->
-        <li><a href="metadataSetup.action?type=e">Event Metadata Setup</a></li>
-        <li><a href="actorRole.action">Actor/Role Management</a></li>
-      </ul>
-    </li>
-    <li id="event_li"><a href="#">Project Events</a>
-      <ul class="submenu">
-        <!--<li><a href="sampleLoader.action">Load Sample</a></li>-->
-        <li><a href="eventLoader.action">Load Event</a></li>
-      </ul>
-    </li>
-    <li id="report_li"><a href="#">Report</a>
-      <ul class="submenu">
-        <li><a href="eventDetail.action">Event Detail</a></li>
-        <li><a href="eventReport.action">Event Report</a></li>
-      </ul>
-    </li>
-  </ul>
-</div>
+<body class="smart-style-2">
 
-</body>
-</html>
+  <!-- #HEADER -->
+  <header id="header" class="clearfix">
+
+    <div id="logo"> </div>
+
+    <!-- #TOGGLE LAYOUT BUTTONS -->
+    <!-- pulled right: nav area -->
+    <div class="pull-right">
+      
+      <!-- collapse menu button -->
+      <div id="hide-menu" class="btn-header pull-right">
+        <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+      </div>
+      <!-- end collapse menu -->
+
+      <!-- logout button -->
+      <div id="logout" class="btn-header transparent pull-right authuser">
+        <span> <a href="logout.action" title="Sign Out" data-action="userLogout" data-logout-msg="You can improve your security further after logging out by closing this opened browser"><i class="fa fa-sign-out"></i></a> </span>
+      </div>
+      <!-- end logout button -->
+
+      <div class="btn-header pull-right authuser">
+        <div id="currUserName" style="color:#fff"></div>
+      </div>
+
+      <div class="btn-header pull-right noauthuser">
+        <a href="addActor.action">Register</a> | <a class="headerLink" href="secureIndex.action">Log in</a>
+      </div>
+
+      <div class="btn-header pull-right">
+        <a class="headerLink" href="help.action">Help</a>
+      </div>
+
+    </div>
+    <!-- end pulled right: nav area -->
+
+  </header>
+  <!-- END HEADER -->
+
+  <aside id="left-panel">
+    <nav>
+      <ul>
+        <li>
+          <a href="#" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-lg fa-fw fa-cloud-upload"></i> <span class="menu-item-parent">Data Submission</span></a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Reporting</span><b class="collapse-sign"><em class="fa fa-plus-square-o"></em></b></a>
+          <ul>
+            <li>
+              <a href="#">Data Submission Reports</a>
+            </li>
+            <li>
+              <a href="#">Web Traffic Reports</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <span class="minifyme" data-action="minifyMenu" style=""> <i class="fa fa-arrow-circle-left hit"></i> </span>
+  </aside>
+
+  <div id="main" role="main">
+    
+    <div id="content">
+
+      <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-cloud-upload"></i> Data Submission <!-- <span>&gt; My Dashboard</span> --></h1>
+
+      <nav id="nav" class="navbar navbar-default">
+        <ul class="navbar-nav">
+          <li id="project_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Project <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="productionStatus.action?projectNames=GSC&iss=true">GSC</a></li>
+              <li><a href="productionStatus.action?projectNames=HMP&iss=true">HMP</a></li>
+              <li><a href="?p=T1D-CNMC">CNMC</a></li>
+              <li><a href="?p=GATES">GATES</a></li>
+            </ul>
+          </li>
+          <li id="cnmc_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">CNMC <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="sampleWithEventLoader.action?label=Family">Register Family</a></li>
+              <li><a href="sampleWithEventLoader.action?label=Person">Register Person</a></li>
+              <li><a href="sampleWithEventLoader.action?label=Sample">Register Sample</a></li>
+              <li><a href="eventLoader.action?label=SR">Sample Receipt</a></li>
+              <li><a href="sampleWithEventLoader.action?label=Aliquot">Register Aliquot</a></li>
+            </ul>
+          </li>
+          <li id="gates_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">GATES <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="eventLoader.action?label=PM">Patient Metadata</a></li>
+              <li><a href="eventLoader.action?label=HM">Household Metadata</a></li>
+              <li><a href="eventLoader.action?label=FM">Family Metadata</a></li>
+              <li><a href="eventLoader.action?label=SM">Sample Metadata</a></li>
+            </ul>
+          </li>
+          <li id="admin_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="projectSetup.action">Project Setup</a></li>
+              <!--<li><a href="metadataSetup.action?type=p">Project Metadata Setup</a></li>
+              <li><a href="metadataSetup.action?type=s">Sample Metadata Setup</a></li>-->
+              <li><a href="metadataSetup.action?type=e">Event Metadata Setup</a></li>
+              <li><a href="actorRole.action">Actor/Role Management</a></li>
+            </ul>
+          </li>
+          <li id="event_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Project Events <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <!--<li><a href="sampleLoader.action">Load Sample</a></li>-->
+              <li><a href="eventLoader.action">Load Event</a></li>
+            </ul>
+          </li>
+          <li id="report_li" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Report <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="eventDetail.action">Event Detail</a></li>
+              <li><a href="eventReport.action">Event Report</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>

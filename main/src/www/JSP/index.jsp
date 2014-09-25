@@ -19,10 +19,9 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
-	<jsp:include page="TopMenu.jsp" />
+<jsp:include page="TopMenu.jsp" />
+</div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 </body>
 </html>

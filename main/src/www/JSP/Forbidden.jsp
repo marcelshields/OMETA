@@ -19,26 +19,22 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <script src="scripts/jquery/jquery-1.7.2.js"></script>
-    <script src="scripts/jquery/menubar.js"></script>
-</head>
-
-
-<body onload="initializeMenubar(<%=request.getRemoteUser()==null%>, "<%=request.getRemoteUser()%>");">
-	<div id="headerDivContainer"></div>
-		<div id="pageTitle" class="panelHeader" style="text-align: left; margin:15px 150px 25px 0;">Forbidden</div>
-		<br/>
+<s:include value="TopMenu.jsp" />
+  
+    <div id="headerDivContainer"></div>
+		<h1>Forbidden</h1>
 		<div id="middle_content_template">
 			<h2>We are sorry, but one or more of the requested resources requires permissions you do not have, even when logged in.</h2>
 		</div>
-	</div>
+	</div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
+<script src="scripts/jquery/menubar.js"></script>
+<script type="text/javascript">
+document.body.onload = function () {
+  initializeMenubar(<%=request.getRemoteUser()==null%>, "<%=request.getRemoteUser()%>");
+};
+</script>
 </body>
 </html>
 

@@ -25,17 +25,7 @@
   Date: 2/10/12
   Time: 8:47 AM
 --%>
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>    
-    <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" />
-</head>
-
-<body>
+<s:include value="TopMenu.jsp" />
 
     <s:form id="sampleLoaderPage" name="sampleLoaderPage"
             namespace="/"
@@ -43,8 +33,7 @@
             method="post" theme="simple">
         <s:hidden name="jobType" id="jobType"/>
         <s:hidden name="label" id="label"/>
-        <s:include value="TopMenu.jsp" />
-        <div id="HeaderPane" style="margin:15px 0 0 30px;">
+        <div id="HeaderPane">
             <table cellpadding="0" cellspacing="0" border="0">
                 <tr><td class="panelHeader">Sample Loader</td></tr>
                 <tr>
@@ -100,6 +89,9 @@
             </div>
         </div>
     </s:form>
+    </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 
     <script>
         var currentAttributeCount = 0,smaOptions;

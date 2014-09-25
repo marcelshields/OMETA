@@ -19,47 +19,42 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-</head>
-<body>
-	<form method="POST" action="j_security_check" id="loginPage" name="loginPage">
-		<jsp:include page="TopMenu.jsp" />
-		<div id="HeaderPane" style="margin:15px 0 0 30px;">
-			<div class="panelHeader">O-META: Ontologies based Matadata Tracking Application</div>
-		</div>
-		<div id="middle_content_template" style="overflow:visible;width:auto;height:auto;margin:35px 25px 25px 25px;">
-			<div id="loginContents">
-				<table>
-					<tr class="gappedTr">
-						<td style="text-align:right;"><strong>User Name</strong></td>
-						<td style="padding-left:25px;"><input type="text" name="j_username" id="usertext"/>
-					</tr>
-					<tr class="gappedTr">
-						<td style="text-align:right;"><strong>Password</strong></td>
-						<td style="padding-left:25px;"><input type="password" name="j_password" id="password"/></td>
-					</tr>
-				</table>
-				<div id="button">
-					<input type="button" name="Login" id="loginButton" value="Login" onclick="javascript:document.loginPage.submit();" style="float:left;margin:20px 0 0 190px;"/>
+<jsp:include page="TopMenu.jsp" />
+		<form method="POST" action="j_security_check" id="loginPage" name="loginPage">
+			
+			<div id="HeaderPane">
+				<div class="panelHeader">O-META: Ontologies based Matadata Tracking Application</div>
+			</div>
+			<div id="middle_content_template" style="overflow:visible;width:auto;height:auto;margin:35px 25px 25px 25px;">
+				<div id="loginContents">
+					<table>
+						<tr class="gappedTr">
+							<td style="text-align:right;"><strong>User Name</strong></td>
+							<td style="padding-left:25px;"><input type="text" name="j_username" id="usertext"/>
+						</tr>
+						<tr class="gappedTr">
+							<td style="text-align:right;"><strong>Password</strong></td>
+							<td style="padding-left:25px;"><input type="password" name="j_password" id="password"/></td>
+						</tr>
+					</table>
+					<div id="button">
+						<input type="button" name="Login" id="loginButton" value="Login" onclick="javascript:document.loginPage.submit();" style="float:left;margin:20px 0 0 190px;"/>
+					</div>
+				</div>
+				<div id="contactDiv" style="clear:both;overflow:visible;float:left;margin:10px 20px">
+					<div style="margin:5px 0 0 0;">
+						<strong>or please <input type="button" name="Register" value="Register" onclick="javascript:addActor();"/> to use the system.</strong>
+					</div>
+					<div id="info" style="margin-top:15px;float:left;">
+						<p>The latest versions of <strong>Firefox(v.14+), IE(v.9+) or Chrome(v.22+)</strong> are recommended in using O-META.<br/>
+						If you experience difficulties with a particular browser, please contact <a href="./help.action">Help</a>.</p>
+					</div>
 				</div>
 			</div>
-			<div id="contactDiv" style="clear:both;overflow:visible;float:left;margin:10px 20px">
-				<div style="margin:5px 0 0 0;">
-					<strong>or please <input type="button" name="Register" value="Register" onclick="javascript:addActor();"/> to use the system.</strong>
-				</div>
-				<div id="info" style="margin-top:15px;float:left;">
-					<p>The latest versions of <strong>Firefox(v.14+), IE(v.9+) or Chrome(v.22+)</strong> are recommended in using O-META.<br/>
-					If you experience difficulties with a particular browser, please contact <a href="./help.action">Help</a>.</p>
-				</div>
-			</div>
-		</div>
-	</form>
+		</form>
+	</div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 
 	<script>
 		function addActor() {

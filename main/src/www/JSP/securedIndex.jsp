@@ -19,18 +19,14 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
-	<jsp:include page="TopMenu.jsp" />
-	<div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div id="HeaderPane">
-			<div class="panelHeader" style="margin-bottom:25px;">O-META: Ontologies based Matadata Tracking Application</div>
-			<div class="alert_info" onclick="$('.alert_info').remove();">
-        <strong>Welcome to OMETA!</strong>
+<jsp:include page="TopMenu.jsp" />
+	
+  		<div class="panelHeader" style="margin-bottom:25px;">O-META: Ontologies based Matadata Tracking Application</div>
+  		<div class="alert_info" onclick="$('.alert_info').remove();">
+          <strong>Welcome to OMETA!</strong>
       </div>
-		</div>
-  </div>
+		</div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 </body>
 </html>

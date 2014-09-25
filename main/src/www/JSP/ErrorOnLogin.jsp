@@ -19,21 +19,16 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-</head>
-<body>
-  <jsp:include page="TopMenu.jsp"/>
-  <div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div class="panelHeader">Login Failed</div>
-  </div>
-  <div id="middle_content_template">
-    <p>Your attempt at logging in has failed.  Please check your username and password, and try again.</p>
-  </div>
+<s:include value="TopMenu.jsp" />
+    <div id="HeaderPane">
+      <h1>Login Failed</h1>
+    </div>
+    <div id="middle_content_template">
+      <p>Your attempt at logging in has failed.  Please check your username and password, and try again.</p>
+    </div>
+  </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 </body>
 </html>
 

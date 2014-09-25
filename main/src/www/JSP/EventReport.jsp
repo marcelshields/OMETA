@@ -19,83 +19,75 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <link rel="stylesheet" href="style/cupertino/jquery-ui-1.8.18.custom.css" />
+<s:include value="TopMenu.jsp" />
   <style>
     tr.even { padding: 2px; background-color: #e9e9e9; }
     tr.odd { padding: 2px; background-color: #f5f5f5; }
     tr.odd td, tr.even td { padding: 6px 8px; margin: 0; vertical-align: top; }
     .chkbox { margin:5px 5px 5px 15px; }
   </style>
-</head>
-
-<body>
-<s:form id="eventReportPage" name="eventReportPage" namespace="/" action="eventReport" method="post" theme="simple">
-  <s:include value="TopMenu.jsp" />
-  <div id="HeaderPane" style="margin:15px 0 0 30px;">
-    <div class="panelHeader">Event Report</div>
-    <div id="errorMessagesPanel" style="margin-top:15px;"></div>
-    <s:if test="hasActionErrors()">
-      <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
-    </s:if>
-    <s:if test="hasActionMessages()">
-      <div class="alert_info" onclick="$('.alert_info').remove();">
-        <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+    <s:form id="eventReportPage" name="eventReportPage" namespace="/" action="eventReport" method="post" theme="simple">
+      <div id="HeaderPane" style="margin:15px 0 0 30px;">
+        <div class="panelHeader">Event Report</div>
+        <div id="errorMessagesPanel" style="margin-top:15px;"></div>
+        <s:if test="hasActionErrors()">
+          <input type="hidden" id="error_messages" value="<s:iterator value='actionErrors'><s:property/><br/></s:iterator>"/>
+        </s:if>
+        <s:if test="hasActionMessages()">
+          <div class="alert_info" onclick="$('.alert_info').remove();">
+            <strong><s:iterator value='actionMessages'><s:property/><br/></s:iterator></strong>
+          </div>
+        </s:if>
       </div>
-    </s:if>
-  </div>
-  <div id="middle_content_template">
-    <div id="statusTableDiv">
-      <div id="tableTop">
-        <table>
-          <tr>
-            <td  align="right">Project</td>
-            <td class="ui-combobox">
-              <s:select id="_projectSelect" list="projectList" name="selectedProjectId" headerKey="0" headerValue="" listValue="projectName" listKey="projectId" required="true"/>
-            </td>
-          </tr>
-          <tr>
-            <td align="right">Date Range</td>
-            <td>
-              <s:textfield id="fromDate" name="fromDate" label="from"/> ~ <s:textfield id="toDate" name = "toDate" label="to"/>
-            </td>
-          </tr>
-        </table>
+      <div id="middle_content_template">
+        <div id="statusTableDiv">
+          <div id="tableTop">
+            <table>
+              <tr>
+                <td  align="right">Project</td>
+                <td class="ui-combobox">
+                  <s:select id="_projectSelect" list="projectList" name="selectedProjectId" headerKey="0" headerValue="" listValue="projectName" listKey="projectId" required="true"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right">Date Range</td>
+                <td>
+                  <s:textfield id="fromDate" name="fromDate" label="from"/> ~ <s:textfield id="toDate" name = "toDate" label="to"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div style="margin-top:25px;">
+            <h1 class="csc-firstHeader">Attributes</h1>
+          </div>
+          <div id="attributesTableDiv">
+            <table name="attributesTable" id="attributesTable" class="contenttable" style="width:95%;">
+              <tbody id="attributesTableBody">
+              <tr class="even">
+                <td width="20%" style="padding:5px 0 5px 5px;">Project</td>
+                <td style="padding:5px 0 5px 0;" colspan="2" id="projectMetaAttributesTD"></td>
+              </tr>
+              <tr class="odd">
+                <td width="20%" style="padding:5px 0 5px 5px;">Sample</td>
+                <td style="padding:5px 0 5px 0;" colspan="2" id="sampleMetaAttributesTD"></td>
+              </tr>
+              <tr class="even">
+                <td width="20%" style="padding:5px 0 5px 5px;">Event</td>
+                <td style="padding:5px 0 5px 0;" id="eventMetaAttributesTD" ></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="submitDiv" style="margin:15px 0 0 0;">
+            <input type="button" onclick="javascript:open_status_page();" id="eventReportPageButton" value="Generate Status Page"/>
+            <input type="button" style="margin-left:15px;" onclick="javascript:doClear();" value="Clear" />
+          </div>
+        </div>
       </div>
-      <div style="margin-top:25px;">
-        <h1 class="csc-firstHeader">Attributes</h1>
-      </div>
-      <div id="attributesTableDiv">
-        <table name="attributesTable" id="attributesTable" class="contenttable" style="width:95%;">
-          <tbody id="attributesTableBody">
-          <tr class="even">
-            <td width="20%" style="padding:5px 0 5px 5px;">Project</td>
-            <td style="padding:5px 0 5px 0;" colspan="2" id="projectMetaAttributesTD"></td>
-          </tr>
-          <tr class="odd">
-            <td width="20%" style="padding:5px 0 5px 5px;">Sample</td>
-            <td style="padding:5px 0 5px 0;" colspan="2" id="sampleMetaAttributesTD"></td>
-          </tr>
-          <tr class="even">
-            <td width="20%" style="padding:5px 0 5px 5px;">Event</td>
-            <td style="padding:5px 0 5px 0;" id="eventMetaAttributesTD" ></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="submitDiv" style="margin:15px 0 0 0;">
-        <input type="button" onclick="javascript:open_status_page();" id="eventReportPageButton" value="Generate Status Page"/>
-        <input type="button" style="margin-left:15px;" onclick="javascript:doClear();" value="Clear" />
-      </div>
-    </div>
-  </div>
-</s:form>
+    </s:form>
+    </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 <script src="scripts/jquery/jquery.dataTables.js"></script>
 <script>
   $(document).ready(function() {

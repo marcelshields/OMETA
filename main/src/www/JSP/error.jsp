@@ -19,21 +19,15 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   --%>
 
-<!DOCTYPE HTML>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page isELIgnored="false" %>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-</head>
-<body>
-    <jsp:include page="TopMenu.jsp"/>
-    <div id="pageTitle" class="panelHeader">ERROR</div>
-    <br/>
-    <div id="middle_content_template">
-        <p>There was an error in processing your request. Please try it again.</p>
-        <p><a href="javascript:history.back(-1);">go back</a></p>
-    </div>
+<s:include value="TopMenu.jsp" />
+      <h1>ERROR</h1>
+      <div id="middle_content_template">
+          <p>There was an error in processing your request. Please try it again.</p>
+          <p><a href="javascript:history.back(-1);">go back</a></p>
+      </div>
+    </div><!-- end #content -->
+</div><!-- end #main -->
+<s:include value="globalJS.jsp" />
 </body>
 </html>
 
